@@ -1,0 +1,17 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+#titleBanner {
+    background-image: linear-gradient(to top right, rgb(29, 0, 76), rgb(238, 130, 238));
+    width: 100%;
+    height: 200px;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#title {
+    font-family: sans-serif;
+    color: white;
+}
