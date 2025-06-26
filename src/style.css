@@ -27,14 +27,14 @@ html, body {
     justify-content: center;
     align-items: center;
 }
-#addTaskButton {
+button {
     border: 2px solid purple;
     border-radius: 9px;
     background-color: white;
     font-size: 18px;
     padding: 5px
 }
-#addTaskButton:hover {
+button:hover {
     cursor: pointer;
 }
 input.taskClass {
