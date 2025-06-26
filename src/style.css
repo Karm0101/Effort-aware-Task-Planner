@@ -22,16 +22,33 @@ html, body {
     transform: translateX(-50%);
     width: 700px;
     display: flex;
+    flex-direction: column;
+    row-gap: 20px;
     justify-content: center;
     align-items: center;
-    background-color: grey;
 }
 #addTaskButton {
-    border: 3px solid purple;
+    border: 2px solid purple;
     border-radius: 9px;
     background-color: white;
     font-size: 18px;
+    padding: 5px
 }
 #addTaskButton:hover {
     cursor: pointer;
+}
+input.taskClass {
+    width: 300px;
+    height: 23.5px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 2px solid purple;
+}
+input.deadlineClass {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid purple;
+    padding: 3px
 }
