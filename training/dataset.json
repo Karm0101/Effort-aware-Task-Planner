@@ -127,5 +127,6 @@
     {"task": "watch a movie", "label": "easy"},
     {"task": "take a power nap", "label": "easy"},
     {"task": "listen to a podcast", "label": "easy"},
-    {"task": "watch youtube", "label": "very easy"}
+    {"task": "watch youtube", "label": "very easy"},
+    {"task": "write a final report", "label": "hard"}
 ]
