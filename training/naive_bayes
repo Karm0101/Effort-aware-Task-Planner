@@ -1,0 +1,69 @@
+class NaiveBayesClassifier():
+    def train(self, dataset):
+        veryEasyTasks = []
+        easyTasks = []
+        moderateTasks = []
+        hardTasks = []
+        if json.label == 'very easy':
+            veryEasyTasks.append(json.data)
+        elif json.label == 'easy':
+            easyTasks.append(json.data)
+        elif json.label == 'moderate':
+            moderateTasks.append(json.data)
+        elif json.label == 'hard':
+            hardTasks.append(json.data)
+
+        numOfVeryEasyTasks = len(veryEasyTasks)
+        veryEasyTasks = ' '.join(veryEasyTasks)
+        veryEasyTasks = veryEasyTasks.split(' ')
+
+        numOfEasyTasks = len(easyTasks)
+        easyTasks = ' '.join(easyTasks)
+        easyTasks = easyTasks.split(' ')
+
+        numOfModerateTasks = len(moderateTasks)
+        moderateTasks = ' '.join(moderateTasks)
+        moderateTasks = moderateTasks.split(' ')
+
+        numOfHardTasks = len(hardTasks)
+        hardTasks = ' '.join(hardTasks)
+        hardTasks = hardTasks.split(' ')
+
+        allSentences = veryEasyTasks + easyTasks + moderateTasks + hardTasks
+
+        veryEasyCount = {}
+        easyCount = {}
+        moderateCount = {}
+        hardCount = {}
+
+        for word in allSentences:
+            if word not in veryEasyCount:
+                countInVeryEasy = veryEasyTasks.count(word)
+                countInEasy = easyTasks.count(word)
+                countInModerate = moderateTasks.count(word)
+                countInHard = hardTasks.count(word)
+
+                veryEasyCount.update({word: countInVeryEasy})
+                easyCount.update({word: countInEasy})
+                moderateCount.update({word: countInModerate})
+                hardCount.update({word: countInHard})
+
+        for character in veryEasyCount:
+            veryEasyCount[character] = (veryEasyCount[character] + 1) / (len(veryEasyTasks) + len(veryEasyCount))
+
+        for character in easyCount:
+            easyCount[character] = (easyCount[character] + 1) / (len(easyTasks) + len(easyCount))
+
+        for character in moderateCount:
+            moderateCount[character] = (moderateCount[character] + 1) / (len(moderateTasks) + len(moderateCount))
+
+        for character in hardCount:
+            hardCount[character] = (hardCount[character] + 1) / (len(hardTasks) + len(hardCount))
+
+        probIfVeryEasy = len(veryEasyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        probIfEasy = len(easyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        probIfModerate = len(moderateTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        probIfHard = len(hardTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+
+    def predict(self, textORlistOfTasks):
+        pass
