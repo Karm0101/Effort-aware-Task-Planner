@@ -15,19 +15,19 @@ class NaiveBayesClassifier():
 
         numOfVeryEasyTasks = len(veryEasyTasks)
         veryEasyTasks = ' '.join(veryEasyTasks)
-        veryEasyTasks = veryEasyTasks.split(' ')
+        veryEasyTasks = veryEasyTasks.split()
 
         numOfEasyTasks = len(easyTasks)
         easyTasks = ' '.join(easyTasks)
-        easyTasks = easyTasks.split(' ')
+        easyTasks = easyTasks.split()
 
         numOfModerateTasks = len(moderateTasks)
         moderateTasks = ' '.join(moderateTasks)
-        moderateTasks = moderateTasks.split(' ')
+        moderateTasks = moderateTasks.split()
 
         numOfHardTasks = len(hardTasks)
         hardTasks = ' '.join(hardTasks)
-        hardTasks = hardTasks.split(' ')
+        hardTasks = hardTasks.split()
 
         allSentences = veryEasyTasks + easyTasks + moderateTasks + hardTasks
 
