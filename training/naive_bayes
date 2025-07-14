@@ -1,4 +1,14 @@
 class NaiveBayesClassifier():
+    def __init__(self):
+        self.probVeryEasy = 0
+        self.probEasy = 0
+        self.probModerate = 0
+        self.probHard = 0
+        self.veryEasyCount = {}
+        self.easyCount = {}
+        self.moderateCount = {}
+        self.hardCount = {}
+
     def train(self, dataset):
         veryEasyTasks = []
         easyTasks = []
@@ -31,11 +41,6 @@ class NaiveBayesClassifier():
 
         allSentences = veryEasyTasks + easyTasks + moderateTasks + hardTasks
 
-        veryEasyCount = {}
-        easyCount = {}
-        moderateCount = {}
-        hardCount = {}
-
         for word in allSentences:
             if word not in veryEasyCount:
                 countInVeryEasy = veryEasyTasks.count(word)
@@ -43,27 +48,46 @@ class NaiveBayesClassifier():
                 countInModerate = moderateTasks.count(word)
                 countInHard = hardTasks.count(word)
 
-                veryEasyCount.update({word: countInVeryEasy})
-                easyCount.update({word: countInEasy})
-                moderateCount.update({word: countInModerate})
-                hardCount.update({word: countInHard})
+                self.veryEasyCount.update({word: countInVeryEasy})
+                self.easyCount.update({word: countInEasy})
+                self.moderateCount.update({word: countInModerate})
+                self.hardCount.update({word: countInHard})
 
-        for character in veryEasyCount:
-            veryEasyCount[character] = (veryEasyCount[character] + 1) / (len(veryEasyTasks) + len(veryEasyCount))
+        for character in self.veryEasyCount:
+            self.veryEasyCount[character] = (self.veryEasyCount[character] + 1) / (len(veryEasyTasks) + len(self.veryEasyCount))
 
         for character in easyCount:
-            easyCount[character] = (easyCount[character] + 1) / (len(easyTasks) + len(easyCount))
+            self.easyCount[character] = (self.easyCount[character] + 1) / (len(easyTasks) + len(self.easyCount))
 
         for character in moderateCount:
-            moderateCount[character] = (moderateCount[character] + 1) / (len(moderateTasks) + len(moderateCount))
+            self.moderateCount[character] = (self.moderateCount[character] + 1) / (len(moderateTasks) + len(self.moderateCount))
 
         for character in hardCount:
-            hardCount[character] = (hardCount[character] + 1) / (len(hardTasks) + len(hardCount))
+            self.hardCount[character] = (self.hardCount[character] + 1) / (len(hardTasks) + len(self.hardCount))
 
-        probIfVeryEasy = len(veryEasyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
-        probIfEasy = len(easyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
-        probIfModerate = len(moderateTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
-        probIfHard = len(hardTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        self.probVeryEasy = len(veryEasyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        self.probEasy = len(easyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        self.probModerate = len(moderateTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
+        self.probHard = len(hardTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
 
-    def predict(self, textORlistOfTasks):
-        pass
+    def predict(self, taskList):
+        for i in range(len(taskList)):
+            taskList[i] = taskList[i].split()
+
+        taskPredictions = []
+        for task in taskList:
+            probIfVeryEasy = self.probVeryEasy
+            probIfEasy = self.probEasy
+            probIfModerate = self.probModerate
+            probIfHard = self.probHard
+            for word in task:
+                if word in self.veryEasyCount or word in self.easyCount or word in self.moderateCount or word in self.hardCount:
+                    probIfVeryEasy *= self.veryEasyCount[word]
+                    probIfEasy *= self.easyCount[word]
+                    probIfModerate *= self.moderateCount[word]
+                    probIfHard *= self.hardCount[word]
+
+            probDict = {probIfVeryEasy: "very easy", probIfEasy: "easy", probIfModerate: "moderate", probIfHard: "hard"}
+            taskPredictions.append(probDict.get(max(probDict)))
+    
+        return taskPredictions
