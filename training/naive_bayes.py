@@ -1,3 +1,5 @@
+from preprocess import preprocessor
+
 class NaiveBayesClassifier():
     def __init__(self):
         self.probVeryEasy = 0
@@ -14,14 +16,15 @@ class NaiveBayesClassifier():
         easyTasks = []
         moderateTasks = []
         hardTasks = []
-        if json.label == 'very easy':
-            veryEasyTasks.append(json.data)
-        elif json.label == 'easy':
-            easyTasks.append(json.data)
-        elif json.label == 'moderate':
-            moderateTasks.append(json.data)
-        elif json.label == 'hard':
-            hardTasks.append(json.data)
+        for task in dataset:
+            if task['label'] == 'very easy':
+                veryEasyTasks.append(task['task'])
+            elif task['label'] == 'easy':
+                easyTasks.append(task['task'])
+            elif task['label'] == 'moderate':
+                moderateTasks.append(task['task'])
+            elif task['label'] == 'hard':
+                hardTasks.append(task['task'])
 
         numOfVeryEasyTasks = len(veryEasyTasks)
         veryEasyTasks = ' '.join(veryEasyTasks)
@@ -42,7 +45,7 @@ class NaiveBayesClassifier():
         allSentences = veryEasyTasks + easyTasks + moderateTasks + hardTasks
 
         for word in allSentences:
-            if word not in veryEasyCount:
+            if word not in self.veryEasyCount:
                 countInVeryEasy = veryEasyTasks.count(word)
                 countInEasy = easyTasks.count(word)
                 countInModerate = moderateTasks.count(word)
@@ -56,13 +59,13 @@ class NaiveBayesClassifier():
         for character in self.veryEasyCount:
             self.veryEasyCount[character] = (self.veryEasyCount[character] + 1) / (len(veryEasyTasks) + len(self.veryEasyCount))
 
-        for character in easyCount:
+        for character in self.easyCount:
             self.easyCount[character] = (self.easyCount[character] + 1) / (len(easyTasks) + len(self.easyCount))
 
-        for character in moderateCount:
+        for character in self.moderateCount:
             self.moderateCount[character] = (self.moderateCount[character] + 1) / (len(moderateTasks) + len(self.moderateCount))
 
-        for character in hardCount:
+        for character in self.hardCount:
             self.hardCount[character] = (self.hardCount[character] + 1) / (len(hardTasks) + len(self.hardCount))
 
         self.probVeryEasy = len(veryEasyTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
@@ -72,7 +75,7 @@ class NaiveBayesClassifier():
 
     def predict(self, taskList):
         for i in range(len(taskList)):
-            taskList[i] = taskList[i].split()
+            taskList[i] = preprocessor(taskList[i]).split()
 
         taskPredictions = []
         for task in taskList:

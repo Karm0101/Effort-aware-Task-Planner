@@ -51,4 +51,4 @@ def preprocessor(text):
     text = removeStopWords(text)
     text = removeNonWords(text)
 
-    return text
+    return ' '.join(text)
