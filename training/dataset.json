@@ -128,5 +128,13 @@
     {"task": "take a power nap", "effort": "easy", "importance": "medium importance"},
     {"task": "listen to a podcast", "effort": "easy", "importance": "low importance"},
     {"task": "watch youtube", "effort": "very easy", "importance": "no importance"},
-    {"task": "write a final report", "effort": "hard", "importance": "high importance"}
+    {"task": "write a final report", "effort": "hard", "importance": "high importance"},
+    {"task": "submit ucas personal statement", "effort": "easy", "importance": "high importance"},
+    {"task": "attend job interview", "effort": "moderate", "importance": "high importance"},
+    {"task": "take prescribed medication", "effort": "very easy", "importance": "high importance"},
+    {"task": "schedule doctor appointment", "effort": "easy", "importance": "medium importance"},
+    {"task": "clean your room", "effort": "moderate", "importance": "medium importance"},
+    {"task": "watch a recorded lecture", "effort": "easy", "importance": "medium importance"},
+    {"task": "buy a new notebook", "effort": "moderate", "importance": "low importance"},
+    {"task": "rewatch youtube video", "effort": "very easy", "importance": "no importance"}
 ]
