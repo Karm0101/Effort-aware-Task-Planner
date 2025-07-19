@@ -1,6 +1,6 @@
 from preprocess import preprocessor
 
-class NaiveBayesClassifier():
+class EffortClassifier():
     def __init__(self):
         self.probVeryEasy = 0
         self.probEasy = 0
@@ -17,13 +17,13 @@ class NaiveBayesClassifier():
         moderateTasks = []
         hardTasks = []
         for task in dataset:
-            if task['label'] == 'very easy':
+            if task['effort'] == 'very easy':
                 veryEasyTasks.append(task['task'])
-            elif task['label'] == 'easy':
+            elif task['effort'] == 'easy':
                 easyTasks.append(task['task'])
-            elif task['label'] == 'moderate':
+            elif task['effort'] == 'moderate':
                 moderateTasks.append(task['task'])
-            elif task['label'] == 'hard':
+            elif task['effort'] == 'hard':
                 hardTasks.append(task['task'])
 
         numOfVeryEasyTasks = len(veryEasyTasks)
@@ -42,9 +42,9 @@ class NaiveBayesClassifier():
         hardTasks = ' '.join(hardTasks)
         hardTasks = hardTasks.split()
 
-        allSentences = veryEasyTasks + easyTasks + moderateTasks + hardTasks
+        allTasks = veryEasyTasks + easyTasks + moderateTasks + hardTasks
 
-        for word in allSentences:
+        for word in allTasks:
             if word not in self.veryEasyCount:
                 countInVeryEasy = veryEasyTasks.count(word)
                 countInEasy = easyTasks.count(word)
@@ -91,6 +91,101 @@ class NaiveBayesClassifier():
                     probIfHard *= self.hardCount[word]
 
             probDict = {probIfVeryEasy: "very easy", probIfEasy: "easy", probIfModerate: "moderate", probIfHard: "hard"}
+            taskPredictions.append(probDict.get(max(probDict)))
+    
+        return taskPredictions
+
+class ImportanceClassifier():
+    def __init__(self):
+        self.probNoImportance = 0
+        self.probLowImportance = 0
+        self.probMediumImportance = 0
+        self.probHighImportance = 0
+        self.noImportanceCount = {}
+        self.lowImportanceCount = {}
+        self.mediumImportanceCount = {}
+        self.highImportanceCount = {}
+
+    def train(self, dataset):
+        noImportanceTasks = []
+        lowImportanceTasks = []
+        mediumImportanceTasks = []
+        highImportanceTasks = []
+        for task in dataset:
+            if task['importance'] == 'no importance':
+                noImportanceTasks.append(task['task'])
+            elif task['importance'] == 'low importance':
+                lowImportanceTasks.append(task['task'])
+            elif task['importance'] == 'medium importance':
+                mediumImportanceTasks.append(task['task'])
+            elif task['importance'] == 'high importance':
+                highImportanceTasks.append(task['task'])
+
+        numOfNoImportanceTasks = len(noImportanceTasks)
+        noImportanceTasks = ' '.join(noImportanceTasks)
+        noImportanceTasks = noImportanceTasks.split()
+
+        numOfLowImportanceTasks = len(lowImportanceTasks)
+        lowImportanceTasks = ' '.join(lowImportanceTasks)
+        lowImportanceTasks = lowImportanceTasks.split()
+
+        numOfMediumImportanceTasks = len(mediumImportanceTasks)
+        mediumImportanceTasks = ' '.join(mediumImportanceTasks)
+        mediumImportanceTasks = mediumImportanceTasks.split()
+
+        numOfHighImportanceTasks = len(highImportanceTasks)
+        highImportanceTasks = ' '.join(highImportanceTasks)
+        highImportanceTasks = highImportanceTasks.split()
+
+        allTasks = noImportanceTasks + lowImportanceTasks + mediumImportanceTasks + highImportanceTasks
+
+        for word in allTasks:
+            if word not in self.noImportanceCount:
+                countInNoImportance = noImportanceTasks.count(word)
+                countInLowImportance = lowImportanceTasks.count(word)
+                countInMediumImportance = mediumImportanceTasks.count(word)
+                countInHighImportance = highImportanceTasks.count(word)
+
+                self.noImportanceCount.update({word: countInNoImportance})
+                self.lowImportanceCount.update({word: countInLowImportance})
+                self.mediumImportanceCount.update({word: countInMediumImportance})
+                self.highImportanceCount.update({word: countInHighImportance})
+
+        for character in self.noImportanceCount:
+            self.noImportanceCount[character] = (self.noImportanceCount[character] + 1) / (len(noImportanceTasks) + len(self.noImportanceCount))
+
+        for character in self.lowImportanceCount:
+            self.lowImportanceCount[character] = (self.lowImportanceCount[character] + 1) / (len(lowImportanceTasks) + len(self.lowImportanceCount))
+
+        for character in self.mediumImportanceCount:
+            self.mediumImportanceCount[character] = (self.mediumImportanceCount[character] + 1) / (len(mediumImportanceTasks) + len(self.mediumImportanceCount))
+
+        for character in self.highImportanceCount:
+            self.highImportanceCount[character] = (self.highImportanceCount[character] + 1) / (len(highImportanceTasks) + len(self.highImportanceCount))
+
+        self.probNoImportance = len(noImportanceTasks) / (len(noImportanceTasks) + len(lowImportanceTasks) + len(mediumImportanceTasks) + len(highImportanceTasks))
+        self.probLowImportance = len(lowImportanceTasks) / (len(noImportanceTasks) + len(lowImportanceTasks) + len(mediumImportanceTasks) + len(highImportanceTasks))
+        self.probMediumImportance = len(mediumImportanceTasks) / (len(noImportanceTasks) + len(lowImportanceTasks) + len(mediumImportanceTasks) + len(highImportanceTasks))
+        self.probHighImportance = len(highImportanceTasks) / (len(noImportanceTasks) + len(lowImportanceTasks) + len(mediumImportanceTasks) + len(highImportanceTasks))
+
+    def predict(self, taskList):
+        for i in range(len(taskList)):
+            taskList[i] = preprocessor(taskList[i]).split()
+
+        taskPredictions = []
+        for task in taskList:
+            probIfNoImportance = self.probNoImportance
+            probIfLowImportance = self.probLowImportance
+            probIfMediumImportnace = self.probMediumImportance
+            probIfHighImportance = self.probHighImportance
+            for word in task:
+                if word in self.noImportanceCount or word in self.lowImportanceCount or word in self.mediumImportanceCount or word in self.highImportanceCount:
+                    probIfNoImportance *= self.noImportanceCount[word]
+                    probIfLowImportance *= self.lowImportanceCount[word]
+                    probIfMediumImportnace *= self.mediumImportanceCount[word]
+                    probIfHighImportance *= self.highImportanceCount[word]
+
+            probDict = {probIfNoImportance: "no importance", probIfLowImportance: "low importance", probIfMediumImportnace: "medium importance", probIfHighImportance: "high importance"}
             taskPredictions.append(probDict.get(max(probDict)))
     
         return taskPredictions

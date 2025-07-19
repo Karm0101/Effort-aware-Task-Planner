@@ -1,5 +1,5 @@
 from preprocess import preprocessor
-from naive_bayes import NaiveBayesClassifier
+from naive_bayes import EffortClassifier, ImportanceClassifier
 import json
 import pickle
 
@@ -10,11 +10,17 @@ def training():
     for i in range(len(dataset)):
         dataset[i]['task'] = preprocessor(dataset[i]['task'])
 
-    model = NaiveBayesClassifier()
-    model.train(dataset)
+    effortModel = EffortClassifier()
+    effortModel.train(dataset)
 
-    with open('model.pickle', 'wb') as file:
-        pickle.dump(model, file)
+    importanceModel = ImportanceClassifier()
+    importanceModel.train(dataset)
+
+    with open('effortModel.pickle', 'wb') as file:
+        pickle.dump(effortModel, file)
+    
+    with open('importanceModel', 'wb') as file:
+        pickle.dump(importanceModel, file)
 
 if __name__ == '__main__':
     training()
