@@ -73,7 +73,8 @@ class EffortClassifier():
         self.probModerate = len(moderateTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
         self.probHard = len(hardTasks) / (len(veryEasyTasks) + len(easyTasks) + len(moderateTasks) + len(hardTasks))
 
-    def predict(self, taskList):
+    def predict(self, tasks):
+        taskList = tasks.copy()
         for i in range(len(taskList)):
             taskList[i] = preprocessor(taskList[i]).split()
 
@@ -168,7 +169,8 @@ class ImportanceClassifier():
         self.probMediumImportance = len(mediumImportanceTasks) / (len(noImportanceTasks) + len(lowImportanceTasks) + len(mediumImportanceTasks) + len(highImportanceTasks))
         self.probHighImportance = len(highImportanceTasks) / (len(noImportanceTasks) + len(lowImportanceTasks) + len(mediumImportanceTasks) + len(highImportanceTasks))
 
-    def predict(self, taskList):
+    def predict(self, tasks):
+        taskList = tasks.copy()
         for i in range(len(taskList)):
             taskList[i] = preprocessor(taskList[i]).split()
 
