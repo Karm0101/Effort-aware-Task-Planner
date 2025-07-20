@@ -53,6 +53,7 @@ def sortTasks(tasks, deadlines):
 
         tasksPriority.update({tasks[i]: priority})
     
+    tasksPriority = sorted(dict.tasksPriority(), key = lambda item: item[1])
     return tasksPriority
 
 app = Flask(__name__)
