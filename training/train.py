@@ -4,7 +4,7 @@ import json
 import pickle
 
 def training():
-    with open('training\dataset.json', 'r') as f:
+    with open('dataset.json', 'r') as f:
         dataset = json.load(f)
 
     for i in range(len(dataset)):
@@ -19,7 +19,7 @@ def training():
     with open('effortModel.pickle', 'wb') as file:
         pickle.dump(effortModel, file)
     
-    with open('importanceModel', 'wb') as file:
+    with open('importanceModel.pickle', 'wb') as file:
         pickle.dump(importanceModel, file)
 
 if __name__ == '__main__':

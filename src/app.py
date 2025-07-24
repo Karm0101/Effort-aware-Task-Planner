@@ -1,26 +1,34 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pickle
 
 def effortPredictions(tasks):
-    with open('effortModel.pickle', 'rb') as file:
+    with open('model\effortModel.pickle', 'rb') as file:
         effortModel = pickle.load(file)
-    
-    effortPreds = effortModel.prediction(tasks)
+        
+    tasksArray = []
+    for task in tasks:
+        tasksArray.append(task.get('task'))
+
+    effortPreds = effortModel.predict(tasksArray)
     return effortPreds
 
 def importancePredictions(tasks):
-    with open('importanceModel.pickle', 'rb') as file:
+    with open('model\importanceModel.pickle', 'rb') as file:
         importanceModel = pickle.load(file)
     
-    importancePreds = importanceModel.prediction(tasks)
+    tasksArray = []
+    for task in tasks:
+        tasksArray.append(task.get('task'))
+        
+    importancePreds = importanceModel.predict(tasksArray)
     return importancePreds
 
 def easinessScore(effortPrediction):
     if effortPrediction == 'very easy':
         easiness = 4
-    if effortPrediction == 'easy':
+    elif effortPrediction == 'easy':
         easiness = 3
-    if effortPrediction == 'moderate':
+    elif effortPrediction == 'moderate':
         easiness = 2
     else:
         easiness = 1
@@ -30,16 +38,16 @@ def easinessScore(effortPrediction):
 def importanceScore(importancePrediction):
     if importancePrediction == 'high importance':
         importance = 4
-    if importancePrediction == 'medium importance':
+    elif importancePrediction == 'medium importance':
         importance = 3
-    if importancePrediction == 'low importance':
+    elif importancePrediction == 'low importance':
         importance = 2
     else:
         importance = 1
     
     return importance
 
-def sortTasks(tasks, deadlines):
+def sortTasks(tasks):
     effortPreds = effortPredictions(tasks)
     importancePreds = importancePredictions(tasks)
     tasksPriority = {}
@@ -47,20 +55,36 @@ def sortTasks(tasks, deadlines):
     for i in range(len(tasks)):
         easiness = easinessScore(effortPreds[i])
         importance = importanceScore(importancePreds[i])
-        urgency = 1/(deadlines[i] + 1)
+        deadline = tasks[i].get('deadline')
+
+        if deadline:
+            urgency = 1/(deadline + 1)
+        else:
+            urgency = 0.01
 
         priority = easiness * importance * urgency
 
-        tasksPriority.update({tasks[i]: priority})
+        print(easiness, importance, deadline)
+        tasksPriority.update({tasks[i].get('task'): priority})
     
-    tasksPriority = sorted(dict.tasksPriority(), key = lambda item: item[1])
+    tasksPriority = sorted(tasksPriority, key=tasksPriority.get, reverse=True)
     return tasksPriority
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def hello():
     return render_template('index.html')
+
+@app.route("/process_tasks", methods=['POST', 'GET'])
+def processTasks():
+    if request.method == 'POST':
+        tasks = request.get_json()
+        tasksPriority = sortTasks(tasks)
+        return tasksPriority
+    else:
+        return render_template('index.html')
+        
 
 if __name__ == '__main__':
     app.run(debug=True)
