@@ -1,8 +1,9 @@
 const addTaskButton = document.getElementById("addTaskButton");
 const enterTasksButton = document.getElementById("enterTasksButton");
+const taskContainer = document.getElementById('taskContainer');
 
-function addTask(pointerEvent) {
-    pointerEvent.preventDefault();
+function addTask(event) {
+    event.preventDefault();
 
     const newDiv = document.createElement("div");
     const taskBox = document.createElement("input");
@@ -21,10 +22,11 @@ function addTask(pointerEvent) {
     taskBox.classList.add("taskClass");
     deadlineBox.classList.add("deadlineClass");
 
-    document.getElementById("taskContainer").appendChild(newDiv);
+    taskContainer.appendChild(newDiv);
 }
 
-function enterTasks(){
+function enterTasks(event){
+    event.preventDefault();
     const taskData = document.querySelectorAll('#taskContainer input');
     const currentDate = new Date();
     let tasksArray = [];
@@ -45,12 +47,37 @@ function enterTasks(){
     })
     .then(response => {
         if (response.ok) {
-            return response.json()
+            return response.json();
         }
         else {}
     })
-    .then(data => console.log(data))
-    .catch(error => console.log('Error'))
+    .then(data => {
+        for (let i = 0; i < data.length; i++) {
+            taskContainer.innerHTML = '<div id="controlButtons"><button id="addTaskButton">Add a new task</button><button id="enterTasksButton" type="submit">Plan task order</button><button id="removeTasks" disabled="true">Remove ordered tasks</button></div>';
+
+            const newDiv = document.createElement("div");
+            const newCheckBox = document.createElement("input");
+            const taskBox = document.createElement("p");
+            const deadlineBox = document.createElement("p");
+
+            newDiv.appendChild(newCheckBox);
+            newDiv.appendChild(taskBox);
+            newDiv.appendChild(deadlineBox);
+
+            newDiv.classList.add('taskContainerClass')
+            newCheckBox.classList.add('checkBoxClass');
+            taskBox.classList.add('orderedTaskClass');
+            deadlineBox.classList.add('orderedDeadlineClass');
+
+            newCheckBox.type = 'checkbox'
+
+            document.getElementById("orderedTasksContainer").appendChild(newDiv);
+
+            document.getElementById('addTaskButton').disabled = true;
+            document.getElementById('enterTasksButton').disabled = true;
+        }
+    })
+    .catch(error => console.log('Error'));
 }
 
 addTaskButton.addEventListener("click", addTask);

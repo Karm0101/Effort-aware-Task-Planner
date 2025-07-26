@@ -13,12 +13,14 @@
     <div id="titleBanner">
       <h1 id="title">✨ Effort-aware Task Planner</h1>
     </div>
-    <div id="taskContainer" action="#" method="post">
+    <form id="taskContainer" method="post">
       <div id="controlButtons">
         <button id="addTaskButton">Add a new task</button>
         <button id="enterTasksButton" type="submit">Plan task order</button>
+        <button id="removeTasks" disabled="true">Remove ordered tasks</button>
       </div>
-    </div>
+    </form>
+    <div id="orderedTasksContainer"></div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>

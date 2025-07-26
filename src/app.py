@@ -64,7 +64,6 @@ def sortTasks(tasks):
 
         priority = easiness * importance * urgency
 
-        print(easiness, importance, deadline)
         tasksPriority.update({tasks[i].get('task'): priority})
     
     tasksPriority = sorted(tasksPriority, key=tasksPriority.get, reverse=True)

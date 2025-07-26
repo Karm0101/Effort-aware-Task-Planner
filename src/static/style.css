@@ -32,7 +32,7 @@ button {
     border-radius: 9px;
     background-color: white;
     font-size: 18px;
-    padding: 5px
+    padding: 5px;
 }
 button:hover {
     cursor: pointer;
@@ -51,4 +51,57 @@ input.deadlineClass {
     border-radius: 5px;
     border: 2px solid purple;
     padding: 3px
+}
+#orderedTasksContainer{
+    position: absolute;
+    top: 39%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.taskContainerClass {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: fit-content;
+    align-items: center;
+}
+.checkBoxClass {
+    appearance: none;
+    width: 33px;
+    height: 33px;
+    border: 2px solid purple;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    font-family: sans-serif;
+    margin: 2.5px;
+}
+.checkBoxClass:checked {
+    background-color: purple;
+}
+.checkBoxClass:checked::before {
+    content: 'X'
+}
+.orderedTaskClass {
+    width: 210px;
+    height: 30px;
+    border: 2px solid purple;
+    border-radius: 5px;
+    margin: 2.5px;
+}
+.orderedDeadlineClass {
+    width: 30px;
+    height: 30px;
+    border: 2px solid purple;
+    border-radius: 5px;
+    margin: 2.5px;
 }
