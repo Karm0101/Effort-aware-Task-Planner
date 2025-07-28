@@ -43,6 +43,7 @@ input.taskClass {
     margin-right: 10px;
     border-radius: 5px;
     border: 2px solid purple;
+    font-size: 17px;
 }
 input.deadlineClass {
     text-align: center;
@@ -104,4 +105,11 @@ input.deadlineClass {
     border: 2px solid purple;
     border-radius: 5px;
     margin: 2.5px;
+}
+p {
+    display: flex;
+    align-items: center;
+    font-family: sans-serif;
+    padding-left: 10px;
+    font-size: 17px;
 }

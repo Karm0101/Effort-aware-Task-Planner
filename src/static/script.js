@@ -1,6 +1,8 @@
 const addTaskButton = document.getElementById("addTaskButton");
 const enterTasksButton = document.getElementById("enterTasksButton");
 const taskContainer = document.getElementById('taskContainer');
+const removeTasksButton = document.getElementById('removeTasksButton');
+const orderedTasksContainer = document.getElementById("orderedTasksContainer");
 
 function addTask(event) {
     event.preventDefault();
@@ -52,9 +54,12 @@ function enterTasks(event){
         else {}
     })
     .then(data => {
-        for (let i = 0; i < data.length; i++) {
-            taskContainer.innerHTML = '<div id="controlButtons"><button id="addTaskButton">Add a new task</button><button id="enterTasksButton" type="submit">Plan task order</button><button id="removeTasks" disabled="true">Remove ordered tasks</button></div>';
+        taskContainer.innerHTML = '<div id="controlButtons"><button id="addTaskButton">Add a new task</button><button id="enterTasksButton" type="submit">Plan task order</button><button id="removeTasksButton" disabled="true">Remove ordered tasks</button></div>';
+        document.getElementById('addTaskButton').disabled = true;
+        document.getElementById('enterTasksButton').disabled = true;
+        document.getElementById('removeTasksButton').disabled = false;
 
+        for (let i = 0; i < data.length; i++) {
             const newDiv = document.createElement("div");
             const newCheckBox = document.createElement("input");
             const taskBox = document.createElement("p");
@@ -71,14 +76,21 @@ function enterTasks(event){
 
             newCheckBox.type = 'checkbox'
 
-            document.getElementById("orderedTasksContainer").appendChild(newDiv);
+            taskBox.textContent = data[i]
 
-            document.getElementById('addTaskButton').disabled = true;
-            document.getElementById('enterTasksButton').disabled = true;
+            orderedTasksContainer.appendChild(newDiv);
         }
     })
     .catch(error => console.log('Error'));
 }
 
+function removeOrderedTasks() {
+    orderedTasksContainer.innerHTML = '<div id="orderedTasksContainer"></div>';
+    addTaskButton.disabled = false;
+    enterTasksButton.disabled = false;
+    removeTasksButton.disabled = true;
+}
+
 addTaskButton.addEventListener("click", addTask);
 enterTasksButton.addEventListener("click", enterTasks);
+removeTasksButton.addEventListener("click", removeOrderedTasks)
