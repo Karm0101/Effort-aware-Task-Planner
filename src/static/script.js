@@ -27,6 +27,10 @@ function addTask(event) {
     taskContainer.appendChild(newDiv);
 }
 
+function putDeadline(tasksArray, task, ) {
+
+}
+
 function enterTasks(event){
     event.preventDefault();
     const taskData = document.querySelectorAll('#taskContainer input');
@@ -75,10 +79,22 @@ function enterTasks(event){
             deadlineBox.classList.add('orderedDeadlineClass');
 
             newCheckBox.type = 'checkbox'
+            newCheckBox.name = 'checkbox'
 
             taskBox.textContent = data[i]
 
+            let task = tasksArray.find((item) => {
+                return item.task == data[i]
+            })
+            deadlineBox.textContent = isNaN(task.deadline) ? '':task.deadline
+
             orderedTasksContainer.appendChild(newDiv);
+        }
+
+        let checkboxes = document.getElementsByClassName("taskContainerClass")
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].addEventListener("click", checkboxTick)
         }
     })
     .catch(error => console.log('Error'));
@@ -91,6 +107,10 @@ function removeOrderedTasks() {
     removeTasksButton.disabled = true;
 }
 
+function checkboxTick(event) {
+    event.target.parentNode.remove()
+}
+
 addTaskButton.addEventListener("click", addTask);
 enterTasksButton.addEventListener("click", enterTasks);
-removeTasksButton.addEventListener("click", removeOrderedTasks)
+removeTasksButton.addEventListener("click", removeOrderedTasks);
